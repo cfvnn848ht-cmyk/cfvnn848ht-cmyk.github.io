@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>СтудАрхив — База знаний университета</title>
+    <!-- Подключаем Tailwind CSS для красивого дизайна -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans">
+
+    <!-- Шапка сайта -->
+    <header class="bg-blue-600 text-white shadow-md py-4 px-6">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <h1 class="text-2xl font-bold flex items-center gap-2">
+                <i class="fa-solid class fa-graduation-cap"></i> СтудАрхив
+            </h1>
+            <span class="text-sm bg-blue-700 px-3 py-1 rounded-full">Версия 1.0 (Бета)</span>
+        </div>
+    </header>
+
+    <!-- Основной контейнер -->
+    <main class="max-w-7xl mx-auto p-4 md:p-6 grid grid-cols-1 md:grid-cols-4 gap-6">
+        
+        <!-- Панель навигации (Слева) -->
+        <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 col-span-1">
+            <h2 class="font-bold text-lg mb-4 text-slate-700"><i class="fa-solid fa-filter"></i> Выберите предмет</h2>
+            
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Факультет</label>
+                    <select id="facultySelect" class="w-full p-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></select>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Курс</label>
+                    <select id="courseSelect" class="w-full p-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></select>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold uppercase text-slate-400 mb
+
+
+-1">Предмет</label>
+                    <select id="subjectSelect" class="w-full p-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Контентная область (Справа) -->
+        <div class="col-span-1 md:col-span-3 space-y-6">
+
+            <!-- Карточка предмета -->
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                <h2 id="currentSubjectName" class="text-3xl font-extrabold text-slate-800">Выберите предмет слева</h2>
+                <p id="currentSubjectMeta" class="text-slate-400 text-sm mt-1"></p>
+            </div>
+
+            <!-- Разделы материалов -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                
+                <!-- Лекции и конспекты -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                    <h3 class="text-xl font-bold text-blue-600 mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-book-open"></i> Лекции и конспекты
+                    </h3>
+                    <ul id="lecturesList" class="space-y-2 text-slate-600">
+                        <!-- Сюда вставляются лекции -->
+                    </ul>
+                </div>
+
+                <!-- Лабораторные и практики -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                    <h3 class="text-xl font-bold text-emerald-600 mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-flask"></i> Лабораторные и практики
+                    </h3>
+                    <ul id="labsList" class="space-y-2 text-slate-600">
+                        <!-- Сюда вставляются лабы -->
+                    </ul>
+                </div>
+
+            </div>
+
+            <!-- Лайфхаки по преподавателям -->
+            <div class="bg-amber-50 p-6 rounded-xl border border-amber-200 shadow-sm">
+                <h3 class="text-xl font-bold text-amber-800 mb-3 flex items-center gap-2">
+                    <i class="fa-solid fa-lightbulb"></i> Лайфхаки по преподавателям и сдаче
+                </h3>
+                <div id="subjectTips" class="text-amber-950 leading-relaxed text-sm">
+                    Выберите предмет, чтобы прочитать советы по сдаче зачетов и экзаменов.
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Подвал -->
+    <footer class="bg-slate-800 text-slate-400 text-center py-6 mt-12 border-t border-slate-700">
+        <p class="text-sm">Создано студентами для студентов. При поддержке Студсовета.</p>
+    </footer>
+
+    <!-- Логика работы базы знаний -->
+    <script>
+        // БАЗА ДАННЫХ (Вы можете легко добавлять сюда свои факультеты, предметы и ссылки)
+        const database = {
+            "Строительный факультет": {
+                "2 курс": {
+                    "Сопротивление материалов (Сопромат)": {
+                        lectures: [
+                            { name: "Лекции по геометрическим характеристикам сечений", url: "https://drive.google.com/drive/folders/example1" },
+                            { name: "Шпаргалки по формулам Штейнера", url: "#" }
+                        ],
+                        labs: [
+                            { name: "РГР №1: Геометрические характеристики поперечных сечений стержней", url: "https://drive.google.com/drive/folders/example2" },
+                            { name: "РГР №2: Статически неопределимые стержневые конструкции", url: "#" }
+                        ],
+                        tips: "Преподаватель Михайлов Б.В. обращает внимание на оформление и чертеж эллипса инерции. Обязательно проверяйте размерность (все должно быть в см или см⁴). Любит, когда расчеты оформлены аккуратно и логично."
+                    },
+                    "Теоретическая механика": {
+                        lectures: [
+                            { name: "Краткий курс лекций по
+Error 404 (Не найдено)!!1
+drive.google.com
+
+
+Статике", url: "#" }
+                        ],
+                        labs: [
+                            { name: "Зада
+
+чи С1, С2 по Яблонскому", url: "#" }
+                        ],
+                        tips: "Защищайте задачи сразу после пары. Если затянуть до зачетной недели — сдать будет в разы сложнее из-за очередей."
+                    }
+                }
+            },
+            "Факультет Энергетики": {
+                "1 курс": {
+                    "Общая электротехника": {
+                        lectures: [
+                            { name: "Лекции: Метод контурных токов", url: "#" }
+                        ],
+                        labs: [
+                            { name: "Лабораторная работа №3: Исследование цепей", url: "#" }
+                        ],
+                        tips: "На защите часто просит составить уравнения Кирхгофа прямо у доски."
+                    }
+                }
+            }
+        };
+
+        // Логика управления элементами интерфейса
+        const facultySelect = document.getElementById('facultySelect');
+        const courseSelect = document.getElementById('courseSelect');
+        const subjectSelect = document.getElementById('subjectSelect');
+
+        function init() {
+            // Заполняем факультеты
+            facultySelect.innerHTML = '';
+            for (let fac in database) {
+                let opt = document.createElement('option');
+                opt.value = fac;
+                opt.innerText = fac;
+                facultySelect.appendChild(opt);
+            }
+            
+            updateCourses();
+            
+            facultySelect.addEventListener('change', updateCourses);
+            courseSelect.addEventListener('change', updateSubjects);
+            subjectSelect.addEventListener('change', displaySubjectInfo);
+        }
+
+        function updateCourses() {
+            const fac = facultySelect.value;
+            courseSelect.innerHTML = '';
+            for (let course in database[fac]) {
+                let opt = document.createElement('option');
+                opt.value = course;
+                opt.innerText = course;
+                courseSelect.appendChild(opt);
+            }
+            updateSubjects();
+        }
+
+        function updateSubjects() {
+            const fac = facultySelect.value;
+            const course = courseSelect.value;
+            subjectSelect.innerHTML = '';
+            
+            if (database[fac] && database[fac][course]) {
+                for (let subject in database[fac][course]) {
+                    let opt = document.createElement('option');
+                    opt.value = subject;
+                    opt.innerText = subject;
+                    subjectSelect.appendChild(opt);
+                }
+            }
+            displaySubjectInfo();
+        }
+
+        function displaySubjectInfo() {
+            const fac = facultySelect.value;
+            const course = courseSelect.value;
+            const sub = subjectSelect.value;
+
+            if (!sub) {
+                document.getElementById('currentSubjectName').innerText = "Материалы не найдены";
+                return;
+            }
+
+            const data = database[fac][course][sub];
+
+            // Заголовок
+            document.getElementById('currentSubjectName').innerText = sub;
+            document.getElementById('currentSubjectMeta').innerText = `${fac} • ${course}`;
+
+            // Лекции
+            const lecturesList = document.getElementById('lecturesList');
+            lecturesList.innerHTML = '';
+            data.lectures.forEach(item => {
+                lecturesList.innerHTML += `
+                    <li class="flex justify-between items-center bg-slate-100 p-2 rounded-lg hover:bg-slate-200 transition">
+                        <span class="truncate"><i class="fa-regular fa-file-pdf text-red-500 mr-2"></i>${item.name}</span>
+                        <a href="${item.url}" target="_blank" class="text-blue-600 hover:unde
+
+rline text-sm font-
+
+
+semibold ml-2 flex-shrink-0">Скачать</a>
+                    </li>`;
+            });
+
+            // Лабораторные
+            const labsList = document.getElementById('labsList');
+            labsList.innerHTML = '';
+            data.labs.forEach(item => {
+                labsList.innerHTML += `
+                    <li class="flex justify-between items-center bg-slate-100 p-2 rounded-lg hover:bg-slate-200 transition">
+                        <span class="truncate"><i class="fa-regular fa-file-word text-blue-500 mr-2"></i>${item.name}</span>
+                        <a href="${item.url}" target="_blank" class="text-blue-600 hover:underline text-sm font-semibold ml-2 flex-shrink-0">Скачать</a>
+                    </li>`;
+            });
+
+            // Лайфхаки
+            document.getElementById('subjectTips').innerText = data.tips;
+        }
+
+        window.onload = init;
+    </script>
+</body>
+</html>
